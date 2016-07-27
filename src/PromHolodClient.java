@@ -21,7 +21,7 @@ public class PromHolodClient {
 class MyFrame extends JFrame{
 		
 	public MyFrame()  throws ClassNotFoundException, IOException{
-		setSize(1280,730);
+		setSize(1280,530);
 		MyPanel panel = new MyPanel();
 		Container pane = getContentPane();
 		pane.add(panel);
@@ -35,15 +35,12 @@ class MyPanel extends JPanel{
 	ArrayList<Rectangle> rectangle=new ArrayList<Rectangle>();
 	ArrayList<String> String=new ArrayList<String>();
 	String mas;	
+	Thread thread = new Thread(new Connect());
 	
 			MyPanel(){				
-				addMouseListener( new MyMouse());
-				
-				 mas="m";
-				
-				//try{im = ImageIO.read(new File("Image/tron.jpg"));}catch(IOException exception){}
-				
-				
+				addMouseListener( new MyMouse());				
+				 mas="m";				
+				//try{im = ImageIO.read(new File("Image/tron.jpg"));}catch(IOException exception){}				
 				for (int i = 0, t = 0; i < 9; i++,t+=50){
 					rectangle.add(new Rectangle(800,10+t,150,50));
 				}
@@ -78,6 +75,7 @@ class MyPanel extends JPanel{
 				public void mousePressed(MouseEvent event){				
 					if(server.contains(event.getPoint())){
 						System.out.println("Потытка соеденится");
+						thread.start();
 					}
 							
 					    				
@@ -90,17 +88,32 @@ class Connect implements Runnable{
 	ObjectOutputStream oos;	
 	private PrintWriter out;
 	Socket socket=null;
-	Thread thread = new Thread(this);
 	
-	Connect(){
-		thread.start();
-	}
 	public void run(){
-		
+		try {
+			//socket = new Socket("7.102.42.92", 8080);			
+			socket = new Socket("127.0.0.1", 8080);
+			
+			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);			
+			out.println("+");
+			
+			oin = new ObjectInputStream(socket.getInputStream());
+			b.strs=(ArrayList<String>) oin.readObject();
+			System.out.println(b.strs);
+			
+		} catch (IOException | ClassNotFoundException e1) {e1.printStackTrace();}			         
+		finally {							
+			try {socket.close();}
+			catch (IOException e) {	System.err.println("Socket not closed");}
+		}
 	}
 	
 	
 }
 class Bim implements Serializable{
-			
+	int v; static volatile int w;
+	ArrayList<String> strs=new ArrayList<String>();
+	Bim(){
+		strs.add("Тест");
+	}		
 }
