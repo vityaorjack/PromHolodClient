@@ -75,6 +75,7 @@ class MyPanel extends JPanel{
 				public void mousePressed(MouseEvent event){				
 					if(server.contains(event.getPoint())){
 						System.out.println("Потытка соеденится");
+						
 						thread.start();
 					}
 							
