@@ -5,6 +5,8 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import java.util.concurrent.ThreadPoolExecutor;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -71,15 +73,12 @@ class MyPanel extends JPanel{
 			}	
 			
 			public class MyMouse extends MouseAdapter  {				
-					
+				ExecutorService service = Executors.newFixedThreadPool(3);
 				public void mousePressed(MouseEvent event){				
 					if(server.contains(event.getPoint())){
 						System.out.println("Потытка соеденится");
-						
-						thread.start();
+						service.submit(thread);	
 					}
-							
-					    				
 				}
 			}
 }
