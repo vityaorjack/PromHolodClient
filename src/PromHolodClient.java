@@ -75,16 +75,15 @@ class MyPanel extends JPanel{
 				public void mousePressed(MouseEvent event){				
 					if(server.contains(event.getPoint())){
 						System.out.println("Потытка соеденится");
+						thread = new Thread(new Connect());
+						thread.start();					
 						
-						thread.start();
-					}
-							
-					    				
+					}					    				
 				}
 			}
 }
 class Connect implements Runnable{
-	Bim b = new Bim();
+	Colection colection = new Colection();
 	ObjectInputStream oin;		
 	ObjectOutputStream oos;	
 	private PrintWriter out;
@@ -99,8 +98,8 @@ class Connect implements Runnable{
 			out.println("+");
 			
 			oin = new ObjectInputStream(socket.getInputStream());
-			b.strs=(ArrayList<String>) oin.readObject();
-			System.out.println(b.strs);
+			colection.mainStr=(ArrayList<String>) oin.readObject();
+			System.out.println(colection.mainStr);System.out.println("Данны получены успешно");
 			
 		} catch (IOException | ClassNotFoundException e1) {e1.printStackTrace();}			         
 		finally {							
@@ -111,10 +110,7 @@ class Connect implements Runnable{
 	
 	
 }
-class Bim implements Serializable{
-	int v; static volatile int w;
-	ArrayList<String> strs=new ArrayList<String>();
-	Bim(){
-		strs.add("Тест");
-	}		
+class Colection implements Serializable{	
+	ArrayList<String> mainStr=new ArrayList<String>();
+	ArrayList<String> other=new ArrayList<String>();			
 }
