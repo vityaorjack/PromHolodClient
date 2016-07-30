@@ -21,7 +21,7 @@ public class PromHolodClient {
 class MyFrame extends JFrame{
 		
 	public MyFrame()  throws ClassNotFoundException, IOException{
-		setSize(1280,530);
+		setSize(1280,730);
 		MyPanel panel = new MyPanel();
 		Container pane = getContentPane();
 		pane.add(panel);
@@ -32,14 +32,12 @@ class MyPanel extends JPanel{
 	Font font=new Font("Arial", Font.BOLD, 20);
 	
 	Rectangle server=new Rectangle(500,50,220,35);
-	ArrayList<Rectangle> rectangle=new ArrayList<Rectangle>();
-	ArrayList<String> String=new ArrayList<String>();
-	String mas;	
-	Thread thread = new Thread(new Connect());
+	ArrayList<Rectangle> rectangle=new ArrayList<Rectangle>();	
+	
+	Thread thread = new Thread(new Connect());	
 	
 			MyPanel(){				
-				addMouseListener( new MyMouse());				
-				 mas="m";				
+				addMouseListener( new MyMouse());								
 				//try{im = ImageIO.read(new File("Image/tron.jpg"));}catch(IOException exception){}				
 				for (int i = 0, t = 0; i < 9; i++,t+=50){
 					rectangle.add(new Rectangle(800,10+t,150,50));
@@ -54,18 +52,17 @@ class MyPanel extends JPanel{
 				g.drawString("Связатся с Сервером", 505, 75);				
 				
 				g.setColor(Color.cyan);				
-				
-				for (int i = 0, t = 0; i < 9; i++,t+=50){					
-					g.drawRect(800, 10+t, 150, 50);					
+				//рамка
+				for (int i = 0, t = 0; i < 9; i++,t+=100){					
+					g.drawRect(800, 100+t, 300, 100);					
+				}//текст в рамке
+				g.setColor(Color.black);
+				for(int i = 0, ot = 0; i < Colection.mainStr.size(); i++,ot+=100){
+					g.drawString(Colection.mainStr.get(i), 810, 140+ot);
+					
+					
 				}
-				
-				Iterator <String> n = String.iterator();
-				int s=0;
-				while(n.hasNext()){					
-					String  str=n.next();					
-					g.drawString(str, 805, 40+s);
-					s+=50;
-				}	
+					
 				
 				repaint();
 			}	
@@ -83,7 +80,7 @@ class MyPanel extends JPanel{
 			}
 }
 class Connect implements Runnable{
-	Colection colection = new Colection();
+	
 	ObjectInputStream oin;		
 	ObjectOutputStream oos;	
 	private PrintWriter out;
@@ -95,11 +92,11 @@ class Connect implements Runnable{
 			socket = new Socket("127.0.0.1", 8080);
 			
 			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);			
-			out.println("+");
+			out.println("1");
 			
 			oin = new ObjectInputStream(socket.getInputStream());
-			colection.mainStr=(ArrayList<String>) oin.readObject();
-			System.out.println(colection.mainStr);System.out.println("Данны получены успешно");
+			Colection.mainStr=(ArrayList<String>) oin.readObject();
+			System.out.println(Colection.mainStr);System.out.println("Данны получены успешно");
 			
 		} catch (IOException | ClassNotFoundException e1) {e1.printStackTrace();}			         
 		finally {							
@@ -110,7 +107,7 @@ class Connect implements Runnable{
 	
 	
 }
-class Colection implements Serializable{	
-	ArrayList<String> mainStr=new ArrayList<String>();
-	ArrayList<String> other=new ArrayList<String>();			
+class Colection{	
+	static ArrayList<String> mainStr=new ArrayList<String>();
+	static ArrayList<String> other=new ArrayList<String>();			
 }
