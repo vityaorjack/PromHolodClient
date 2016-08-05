@@ -60,8 +60,8 @@ class MyPanel extends JPanel{
 				//текст в рамке
 				g.setFont(font);
 				g.setColor(Color.black);
-				for(int i = 0, ot = 0; i < Colection.mainStr.size(); i++,ot+=100){
-					g.drawString(Colection.mainStr.get(i), 810, 140+ot);					
+				for(int i = 0, ot = 0; i < connect.main.size(); i++,ot+=100){
+					g.drawString(connect.main.get(i), 810, 140+ot);					
 				}//меню				
 				g.drawRoundRect(500, 50, 220, 35, 25,25);
 				g.drawString("В главное меню", 510, 75);
@@ -89,9 +89,12 @@ class Connect implements Runnable{
 	private PrintWriter out;
 	Socket socket=null;
 	
+	ArrayList<String> main=new ArrayList<String>();
+	Aparat aparat=new Aparat();
+	
 	Thread thread;
 	int number;
-	boolean whil=true;
+	boolean whil=true,tip;
 	
 	Connect(){
 		thread = new Thread(this);					
@@ -107,7 +110,8 @@ class Connect implements Runnable{
 				out.println(number);
 			
 				oin = new ObjectInputStream(socket.getInputStream());
-				Colection.mainStr=(ArrayList<String>) oin.readObject();
+				if(!tip)main=(ArrayList<String>) oin.readObject();
+				else aparat=(Aparat) oin.readObject();
 				whil=false;  sleep(); 
 			}
 			
@@ -118,15 +122,15 @@ class Connect implements Runnable{
 		}
 	}
 	void sleep() throws InterruptedException{
+		while(!whil)
 		Thread.sleep(500);
-		if(!whil)sleep();
+		
 	}
 	void start(int number){		
 		this.number=number;
 		whil=true;
 	}	
 }
-class Colection{	
-	static ArrayList<String> mainStr=new ArrayList<String>();
-	static ArrayList<String> other=new ArrayList<String>();	
+class Aparat{	
+	String main;
 }
