@@ -45,7 +45,7 @@ class MyPanel extends JPanel{
 				}
 			}			
 			public void paintComponent(Graphics g){
-				super.paintComponent(g);
+				super.paintComponent(g);  repaint();
 				setBackground(new Color(150,175,255));
 				//g.drawImage(im,0,0,null);
 				//консоль на экране
@@ -64,9 +64,7 @@ class MyPanel extends JPanel{
 					g.drawString(connect.main.get(i), 810, 140+ot);					
 				}//меню				
 				g.drawRoundRect(500, 50, 220, 35, 25,25);
-				g.drawString("В главное меню", 510, 75);
-				//обновление экрана
-				repaint();
+				g.drawString("В главное меню", 510, 75);				
 			}	
 			
 			public class MyMouse extends MouseAdapter  {				
@@ -78,7 +76,7 @@ class MyPanel extends JPanel{
 							connect.start((i+1));break;
 						}	
 					}
-					if(rectangle.contains(event.getPoint())){connect.start(0);}    				
+					if(rectangle.contains(event.getPoint())){connect.start(0);}   				
 				}
 			}
 }
@@ -112,7 +110,7 @@ class Connect implements Runnable{
 				oin = new ObjectInputStream(socket.getInputStream());
 				if(!tip)main=(ArrayList<String>) oin.readObject();
 				else aparat=(Aparat) oin.readObject();
-				whil=false;  sleep(); 
+				whil=false;  sleep();
 			}
 			
 		} catch (IOException | ClassNotFoundException | InterruptedException e1) {e1.printStackTrace();}			         
@@ -122,9 +120,7 @@ class Connect implements Runnable{
 		}
 	}
 	void sleep() throws InterruptedException{
-		while(!whil)
-		Thread.sleep(500);
-		
+		while(!whil)Thread.sleep(500);		
 	}
 	void start(int number){		
 		this.number=number;
